@@ -1,0 +1,54 @@
+<header class="navbar" [class.scrolled]="isScrolled">
+  <div class="container nav-container">
+    <div class="nav-left">
+      <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+        <i class="fa-solid" [class.fa-bars]="!isMobileMenuOpen" [class.fa-xmark]="isMobileMenuOpen"></i>
+      </button>
+      <a routerLink="/" class="logo" (click)="closeMobileMenu()">
+        <img src="assets/images/ntg-logo.png" alt="ElectroHub Logo" class="logo-img">
+        <span class="logo-text">Electro<span>Hub</span></span>
+      </a>
+    </div>
+
+    <div class="nav-center" [class.active]="isMobileMenuOpen">
+      <nav class="nav-links">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">Home</a>
+        <a routerLink="/products" routerLinkActive="active" (click)="closeMobileMenu()">Products</a>
+        <a *ngIf="isAdminLoggedIn$ | async" routerLink="/admin" routerLinkActive="active" (click)="closeMobileMenu()">Admin</a>
+        <a routerLink="/about" routerLinkActive="active" (click)="closeMobileMenu()">About</a>
+        <a routerLink="/contact" routerLinkActive="active" (click)="closeMobileMenu()">Contact</a>
+      </nav>
+    </div>
+
+    <div class="nav-right">
+      <div class="nav-actions">
+        <!-- User Auth -->
+        <div class="user-action" *ngIf="isLoggedIn$ | async; else authLinks">
+          <button class="action-btn" (click)="toggleUserDropdown()">
+            <i class="fa-regular fa-user"></i>
+            <span class="user-name">{{ (currentUser$ | async)?.name }}</span>
+            <i class="fa-solid fa-chevron-down dropdown-icon"></i>
+          </button>
+          <div class="user-dropdown" *ngIf="showUserDropdown">
+            <a routerLink="/profile" (click)="showUserDropdown = false"><i class="fa-regular fa-circle-user"></i> My Profile</a>
+            <div class="dropdown-divider"></div>
+            <button (click)="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+          </div>
+        </div>
+        
+        <ng-template #authLinks>
+          <a routerLink="/login" class="action-btn" title="Sign In">
+            <i class="fa-regular fa-user"></i>
+          </a>
+        </ng-template>
+
+        <a routerLink="/cart" class="cart-btn" title="Shopping Cart">
+          <div class="cart-icon-wrapper">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="cart-badge" *ngIf="(cartCount$ | async) as count">{{ count }}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,36 @@
+<div class="product-card" @slideUp>
+  <div class="product-image-container">
+    <div class="product-badge" *ngIf="product.rating >= 4.8">Top Rated</div>
+    <img [src]="product.image" [alt]="product.name" class="product-image">
+    <div class="product-actions">
+      <button class="action-icon" title="Quick View" (click)="onQuickView($event)">
+        <i class="fa-regular fa-eye"></i>
+      </button>
+      <button class="action-icon" [class.active]="isInWishlist()" title="Add to Wishlist" (click)="toggleWishlist($event)">
+        <i [class]="isInWishlist() ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+      </button>
+    </div>
+    <button class="add-to-cart-btn" (click)="addToCart()">
+      <i class="fa-solid fa-cart-plus"></i> Add to Cart
+    </button>
+  </div>
+  
+  <div class="product-info">
+    <span class="product-category">{{ product.category }}</span>
+    <h3 class="product-name">{{ product.name }}</h3>
+    
+    <div class="product-rating">
+      <div class="stars">
+        <i class="fa-solid fa-star" *ngFor="let i of [1,2,3,4,5]" [class.filled]="i <= product.rating"></i>
+      </div>
+      <span class="review-count">({{ product.reviews }})</span>
+    </div>
+    
+    <div class="product-footer">
+      <span class="product-price">{{ product.price | currency }}</span>
+      <span class="stock-status" [class.out]="!product.inStock">
+        {{ product.inStock ? 'In Stock' : 'Out of Stock' }}
+      </span>
+    </div>
+  </div>
+</div>

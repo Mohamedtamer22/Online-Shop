@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["angular:styles/component:css;272db2a531be436cb46c3106753cc8e29f6949307989ceacffbc22eda8a328fd;C:/Users/NTG SCHOOL/Documents/Codex/2026-06-23/new-chat/work/electrohub_v1.1.0/src/app/app.component.ts"],
+  "sourcesContent": ["\n    .app-container {\n      display: flex;\n      flex-direction: column;\n      min-height: 100vh;\n    }\n    .main-content {\n      flex: 1;\n    }\n  "],
+  "mappings": ";AACI,CAAC;AACC,WAAS;AACT,kBAAgB;AAChB,cAAY;AACd;AACA,CAAC;AACC,QAAM;AACR;",
+  "names": []
+}

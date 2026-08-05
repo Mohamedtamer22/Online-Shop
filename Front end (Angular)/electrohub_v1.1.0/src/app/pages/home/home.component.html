@@ -1,0 +1,150 @@
+<div class="home-page">
+  <!-- Professional Hero Section -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-circle circle-1"></div>
+      <div class="hero-circle circle-2"></div>
+    </div>
+    <div class="container hero-container">
+      <div class="hero-content animate-slide-up">
+        <div class="hero-badge">
+          <span class="pulse"></span> New Era of Technology
+        </div>
+        <h1 class="hero-title">
+          Unleash the Power of <span>Premium Tech</span>
+        </h1>
+        <p class="hero-subtitle">
+          <span *ngIf="currentUser$ | async as user">Welcome back, {{ user.name }}! </span>
+          Discover the most advanced gadgets and electronics designed for the future. Experience innovation at your fingertips.
+        </p>
+        <div class="hero-actions">
+          <a routerLink="/products" class="btn-primary main-cta">
+            Explore Collection <i class="fa-solid fa-arrow-right"></i>
+          </a>
+          <a routerLink="/about" class="btn-secondary glass-btn">
+            Our Story
+          </a>
+        </div>
+        <div class="hero-trust">
+          <p>Trusted by industry leaders</p>
+          <div class="trust-logos">
+            <i class="fa-brands fa-apple"></i>
+            <i class="fa-brands fa-samsung"></i>
+            <i class="fa-brands fa-sony"></i>
+            <i class="fa-brands fa-microsoft"></i>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual animate-fade-in">
+        <div class="main-image-wrapper">
+          <img src="assets/images/macbookprom3.jpg" alt="Featured Product" class="floating-img">
+          <div class="floating-card spec-card top-left">
+            <i class="fa-solid fa-microchip"></i>
+            <div>
+              <p>M3 Max Chip</p>
+              <span>Extreme Power</span>
+            </div>
+          </div>
+          <div class="floating-card price-card bottom-right">
+            <i class="fa-solid fa-tag"></i>
+            <div>
+              <p>Limited Offer</p>
+              <span>Save up to $200</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="icon-box"><i class="fa-solid fa-truck-fast"></i></div>
+          <div class="feature-info">
+            <h3>Global Delivery</h3>
+            <p>Fast and secure shipping worldwide.</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="icon-box"><i class="fas fa-shield-alt"></i></div>
+          <div class="feature-info">
+            <h3>Extended Warranty</h3>
+            <p>2-year protection on all premium devices.</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="icon-box"><i class="fa-solid fa-headset"></i></div>
+          <div class="feature-info">
+            <h3>Expert Support</h3>
+            <p>24/7 technical assistance from pros.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products Section -->
+  <section class="featured-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="title-area">
+          <span class="sub-title">Handpicked for you</span>
+          <h2 class="section-title">Featured <span>Innovation</span></h2>
+        </div>
+        <a routerLink="/products" class="view-all-btn">View All Products <i class="fa-solid fa-arrow-right-long"></i></a>
+      </div>
+      
+      <div class="product-grid">
+        <app-product-card 
+          *ngFor="let product of featuredProducts$ | async" 
+          [product]="product"
+          (quickView)="openQuickView($event)">
+        </app-product-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick View Modal (Shared) -->
+  <div class="modal-overlay" *ngIf="selectedProduct" (click)="closeQuickView()">
+    <div class="quick-view-modal animate-scale-in" (click)="$event.stopPropagation()">
+      <button class="close-modal" (click)="closeQuickView()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      
+      <div class="modal-content">
+        <div class="modal-image">
+          <img [src]="selectedProduct.image" [alt]="selectedProduct.name">
+        </div>
+        <div class="modal-info">
+          <span class="product-category">{{ selectedProduct.category }}</span>
+          <h2 class="product-name">{{ selectedProduct.name }}</h2>
+          
+          <div class="product-rating">
+            <div class="stars">
+              <i class="fa-solid fa-star" *ngFor="let i of [1,2,3,4,5]" [class.filled]="i <= selectedProduct.rating"></i>
+            </div>
+            <span class="review-count">({{ selectedProduct.reviews }} customer reviews)</span>
+          </div>
+          
+          <p class="product-price">{{ selectedProduct.price | currency }}</p>
+          
+          <p class="product-description">{{ selectedProduct.description }}</p>
+          
+          <div class="modal-actions">
+            <button class="btn-primary" (click)="addToCart(selectedProduct)">
+              <i class="fa-solid fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+          
+          <div class="product-meta">
+            <p><strong>Availability:</strong> <span class="text-success">In Stock</span></p>
+            <p><strong>SKU:</strong> EH-{{ selectedProduct.id }}-PREMIUM</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

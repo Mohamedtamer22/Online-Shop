@@ -1,0 +1,128 @@
+<div class="products-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container">
+      <div class="header-content">
+        <h1 class="animate-slide-up">Our <span>Collection</span></h1>
+        <p class="animate-fade-in">Discover our range of premium electronic devices.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container main-content">
+    <!-- Sidebar Filters -->
+    <aside class="sidebar">
+      <div class="filter-section">
+        <h3 class="filter-title">Search</h3>
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input 
+            type="text" 
+            placeholder="Search products..." 
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()">
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <h3 class="filter-title">Categories</h3>
+        <div class="category-list">
+          <button 
+            class="category-btn" 
+            [class.active]="(selectedCategory$ | async) === 'All'"
+            (click)="onCategorySelect('All')">
+            <i class="fa-solid fa-layer-group"></i> All Products
+          </button>
+          <button 
+            *ngFor="let category of categories$ | async" 
+            class="category-btn"
+            [class.active]="(selectedCategory$ | async) === category"
+            (click)="onCategorySelect(category)">
+            {{ category }}
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <button class="reset-btn" (click)="resetFilters()">
+          <i class="fa-solid fa-arrow-rotate-left"></i> Reset All Filters
+        </button>
+      </div>
+    </aside>
+
+    <!-- Products Grid -->
+    <main class="content">
+      <div class="content-header">
+        <div class="results-count">
+          Showing <strong>{{ (filteredProducts$ | async)?.length }}</strong> products
+        </div>
+      </div>
+
+      <div class="product-grid" *ngIf="(filteredProducts$ | async)?.length; else noResults">
+        <app-product-card 
+          *ngFor="let product of filteredProducts$ | async" 
+          [product]="product"
+          (quickView)="openQuickView($event)"
+          class="animate-fade-in">
+        </app-product-card>
+      </div>
+
+      <ng-template #noResults>
+        <div class="no-results animate-fade-in">
+          <div class="no-results-icon">
+            <i class="fa-solid fa-box-open"></i>
+          </div>
+          <h2>No products found</h2>
+          <p>We couldn't find any products matching your search criteria. Try adjusting your filters or search query.</p>
+          <button class="btn-primary" (click)="resetFilters()">Clear all filters</button>
+        </div>
+      </ng-template>
+    </main>
+  </div>
+
+  <!-- Quick View Modal -->
+  <div class="modal-overlay" *ngIf="selectedProduct" (click)="closeQuickView()">
+    <div class="quick-view-modal animate-scale-in" (click)="$event.stopPropagation()">
+      <button class="close-modal" (click)="closeQuickView()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      
+      <div class="modal-content">
+        <div class="modal-image">
+          <img [src]="selectedProduct.image" [alt]="selectedProduct.name">
+        </div>
+        <div class="modal-info">
+          <span class="product-category">{{ selectedProduct.category }}</span>
+          <h2 class="product-name">{{ selectedProduct.name }}</h2>
+          
+          <div class="product-rating">
+            <div class="stars">
+              <i class="fa-solid fa-star" *ngFor="let i of [1,2,3,4,5]" [class.filled]="i <= selectedProduct.rating"></i>
+            </div>
+            <span class="review-count">({{ selectedProduct.reviews }} customer reviews)</span>
+          </div>
+          
+          <p class="product-price">{{ selectedProduct.price | currency }}</p>
+          
+          <p class="product-description">{{ selectedProduct.description }}</p>
+          
+          <div class="modal-actions">
+            <button class="btn-primary" (click)="addToCart(selectedProduct)">
+              <i class="fa-solid fa-cart-plus"></i> Add to Cart
+            </button>
+            <button class="btn-wishlist">
+              <i class="fa-regular fa-heart"></i> Add to Wishlist
+            </button>
+          </div>
+          
+          <div class="product-meta">
+            <p><strong>Availability:</strong> <span [class.text-success]="selectedProduct.inStock" [class.text-error]="!selectedProduct.inStock">
+              {{ selectedProduct.inStock ? 'In Stock' : 'Out of Stock' }}
+            </span></p>
+            <p><strong>SKU:</strong> EH-{{ selectedProduct.id }}-TECH</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

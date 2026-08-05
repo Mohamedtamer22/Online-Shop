@@ -1,0 +1,106 @@
+<div class="cart-page">
+  <div class="container">
+    <div class="cart-header animate-slide-up">
+      <h1>Your <span>Cart</span></h1>
+      <p *ngIf="(cartItems$ | async)?.length">You have {{ (cartItems$ | async)?.length }} items in your cart.</p>
+    </div>
+
+    <div class="cart-container" *ngIf="(cartItems$ | async)?.length; else emptyCart">
+      <!-- Cart Items List -->
+      <div class="cart-items">
+        <div class="cart-item animate-fade-in" *ngFor="let item of cartItems$ | async">
+          <div class="item-image">
+            <img [src]="item.product.image" [alt]="item.product.name">
+          </div>
+          <div class="item-details">
+            <span class="item-category">{{ item.product.category }}</span>
+            <h3 class="item-name">{{ item.product.name }}</h3>
+            <p class="item-price">{{ item.product.price | currency }}</p>
+          </div>
+          <div class="item-quantity">
+            <button (click)="updateQuantity(item.product.id, item.quantity - 1)" [disabled]="item.quantity <= 1">
+              <i class="fa-solid fa-minus"></i>
+            </button>
+            <span>{{ item.quantity }}</span>
+            <button (click)="updateQuantity(item.product.id, item.quantity + 1)">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <div class="item-total">
+            {{ (item.product.price * item.quantity) | currency }}
+          </div>
+          <button class="remove-btn" (click)="removeItem(item.product.id)" title="Remove Item">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Order Summary Sidebar -->
+      <aside class="cart-summary">
+        <div class="summary-card">
+          <h2 class="summary-title">Order Summary</h2>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>{{ subtotal$ | async | currency }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Estimated Shipping</span>
+            <span class="free">Free</span>
+          </div>
+          <div class="summary-row">
+            <span>Tax</span>
+            <span>{{ tax$ | async | currency }}</span>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span>{{ total$ | async | currency }}</span>
+          </div>
+          <p class="checkout-error" *ngIf="checkoutError">{{ checkoutError }}</p>
+          <button class="checkout-btn" (click)="checkout()">
+            <ng-container *ngIf="isLoggedIn$ | async; else loginToCheckout">
+              Proceed to Checkout <i class="fa-solid fa-arrow-right"></i>
+            </ng-container>
+            <ng-template #loginToCheckout>
+              Sign In to Checkout <i class="fa-solid fa-lock"></i>
+            </ng-template>
+          </button>
+          <div class="payment-methods">
+            <i class="fa-brands fa-cc-visa"></i>
+            <i class="fa-brands fa-cc-mastercard"></i>
+            <i class="fa-brands fa-cc-paypal"></i>
+            <i class="fa-brands fa-cc-apple-pay"></i>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Empty Cart State -->
+    <ng-template #emptyCart>
+      <div class="empty-cart animate-fade-in">
+        <div class="empty-cart-icon">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+        <h2>Your cart is empty</h2>
+        <p>Looks like you haven't added anything to your cart yet. Explore our products and find something you love!</p>
+        <a routerLink="/products" class="btn-primary">Start Shopping</a>
+      </div>
+    </ng-template>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" *ngIf="showSuccess" (click)="showSuccess = false">
+      <div class="success-modal animate-slide-up" (click)="$event.stopPropagation()">
+        <div class="success-icon">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h2>Order Placed Successfully!</h2>
+        <p>Thank you for your purchase. Your order has been received and is being processed.</p>
+        <div class="order-details">
+          <p>Order Number: <strong>#{{ lastOrderId }}</strong></p>
+          <p>We've sent a confirmation email to your registered address.</p>
+        </div>
+        <button class="btn-primary" (click)="showSuccess = false" routerLink="/">Back to Home</button>
+      </div>
+    </div>
+  </div>
+</div>

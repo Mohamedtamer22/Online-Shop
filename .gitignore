@@ -1,0 +1,14 @@
+# Angular
+Front end (Angular)/electrohub_v1.1.0/node_modules/
+Front end (Angular)/electrohub_v1.1.0/dist/
+Front end (Angular)/electrohub_v1.1.0/.angular/
+
+# Spring Boot
+Back-end/online-shop_src/target/
+
+# IDE
+**/.idea/
+**/.vscode/
+
+# Logs
+*.log
